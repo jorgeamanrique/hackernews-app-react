@@ -3,6 +3,7 @@ import '../App.css';
 
 const NewsCard = ({ article }) => {
     const [liked, setLiked] = useState(false);
+    //const [articlesLiked, SetArticlesLiked] = useState([]);
 
     useEffect(() => {
         const item = localStorage.getItem(article.objectID);
@@ -11,7 +12,7 @@ const NewsCard = ({ article }) => {
             setLiked(true);
         }
         
-    }, []);
+    }, [article.objectID]);
 
     const timeSince = (date) => {
 
@@ -40,26 +41,30 @@ const NewsCard = ({ article }) => {
         return Math.floor(seconds) + " seconds";
     };
     
-    const handleLiked = (key) => {
-        console.log(`key: ${key} - liked ${liked}`);
-        const item = localStorage.getItem(key);
-        console.log(`item: ${item}`);
+    const handleLiked = () => {
+        let news = localStorage.getItem("liked-news");
         if(!liked){
-            if(item === null){
-                console.log('Set Item');
-                localStorage.setItem(key, true);
+            if(!news){
+                console.log(`No existe..`);
+
+                let newsArray = [];
+                newsArray.push(article);
+                localStorage.setItem("liked-news", JSON.stringify(newsArray));
+            }
+            else{
+                console.log(`Si existe... news: ${news}`);
+                let temp = JSON.parse(news).filter(story => story.objectID !== article.objectID);
+                temp.push(article);
+                localStorage.setItem("liked-news",JSON.stringify(temp));
+                console.log(news);
             }
         }
         else{
-            if(item){
-                console.log('Remove Item');
-                localStorage.removeItem(key);
-            }
+            let temp = JSON.parse(news).filter(story => story.objectID !== article.objectID);
+            localStorage.setItem("liked-news",JSON.stringify(temp));
         }
 
         setLiked(!liked);
-        console.log(`liked ${liked}`);
-    
     };
 
     if(!article.title) return null;
@@ -88,5 +93,3 @@ const NewsCard = ({ article }) => {
 };
 
 export default NewsCard; 
-
-<div class="selectedLayerLayout"></div>

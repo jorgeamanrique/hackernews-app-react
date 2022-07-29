@@ -1,8 +1,8 @@
 import './App.css';
-import NewsList from './components/NewsList';
+import HomePage from './components/HomePage';
 
 const  App = () => {
-  return <NewsList></NewsList>
+  return <HomePage></HomePage>
 }
 
 export default App;
