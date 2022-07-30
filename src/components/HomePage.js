@@ -1,10 +1,9 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import Pagination from './AppPagination'
 import NewsList from "./NewsList"; 
 
 import '../App.css';
-import PaginationRounded from './AppPagination';
+import PaginationRounded from './pagination';
 import Filter from './Filter';
 
 const HomePage = () => {
@@ -65,35 +64,37 @@ const HomePage = () => {
   },[view, page, query]);
 
   return (
-      <div className="container">
-          <div className="title-info">
+      <main className="container">
+          <section className="title-info">
             <span className="text-style">
               HACKER NEWS
             </span>
-          </div>
-          <ul className='view-news'>
-            <li className={view === 'all' ? 'active' : ''} onClick={()=>{setView('all')}}>
-                <span>All</span>
-            </li>
-            <li className={view === 'my-favs' ? 'active' : ''} onClick={()=>{setView('my-favs')}}>
-                <span>My Favs</span>
-            </li>
-          </ul>
-          <div className="filter-root">
-            <div className={`select-container ${view === 'all' ? 'active' : 'inactive'}`} id="select-container" onClick={() => {setOpen(!open)}}>
-                <p>{selectedFilter}</p>
-                <img src="arrow.png"></img>
-            </div>
-            <Filter open={open} view={view} setQuery={setQuery} setOpen={setOpen} setSelectedFilter={setSelectedFilter}></Filter>
-          </div>
-          <div className="news-container">
-            <NewsList view={view} articles={articles}></NewsList>
-          </div>
-          <PaginationRounded
-            setPage={setPage}
-            totalPages={totalPages}
-            />
-      </div>
+          </section>
+          <section className="content"> 
+                <ul className='view-news'>
+                    <li className={view === 'all' ? 'active' : ''} onClick={()=>{setView('all')}}>
+                        <span>All</span>
+                    </li>
+                    <li className={view === 'my-favs' ? 'active' : ''} onClick={()=>{setView('my-favs')}}>
+                        <span>My Favs</span>
+                    </li>
+                </ul>
+                <div className="filter-root">
+                        <div className={`select-container ${view === 'all' ? 'active' : 'inactive'}`} id="select-container" onClick={() => {setOpen(!open)}}>
+                            <p>{selectedFilter}</p>
+                            <img src="arrow.png"></img>
+                        </div>
+                        <Filter open={open} view={view} setQuery={setQuery} setOpen={setOpen} setSelectedFilter={setSelectedFilter}></Filter>
+                </div>
+                <div className="news-container">
+                    <NewsList view={view} articles={articles}></NewsList>
+                </div>
+                <PaginationRounded
+                setPage={setPage}
+                totalPages={totalPages}
+                />
+           </section>
+      </main>
   )
 };
 

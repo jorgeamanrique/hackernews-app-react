@@ -21,18 +21,21 @@ body{
     letter-spacing: normal;
     color: #3b3b3b;
 }
+.content{
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 1rem;
+}
   
 .news-container {
-    width: 100vw;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(600px, 1fr));
+    width: 100%;
+    display: flex;
     gap: 20px;
-    justify-items: center;
     align-items: center;
     padding-bottom: 100px;
     padding-top: 20px;
-    /*padding-left: 40px; */
-    /* padding: 20px 0px 100px 80px; */
+    justify-content: space-between;
+    flex-wrap: wrap;
   }
 
 .article-data {
@@ -43,6 +46,8 @@ body{
     border-radius: 6px;
     border: solid 1px #979797;
     background-color: #fff;
+    flex-shrink: 1;
+    flex-grow: 1;
     display: flex;
     justify-content: space-between;
   }
@@ -157,10 +162,6 @@ body{
     padding: 20px 10px;
     margin: 0;
     list-style: none;
-}
-
-.filter-root {
-    padding: 0px 0px 25px 150px;
 }
 
 #select-container {
