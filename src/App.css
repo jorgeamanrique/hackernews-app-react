@@ -30,10 +30,12 @@ body{
     justify-items: center;
     align-items: center;
     padding-bottom: 100px;
-    padding-top: 25px;
+    padding-top: 20px;
+    /*padding-left: 40px; */
+    /* padding: 20px 0px 100px 80px; */
   }
 
-  .article-data {
+.article-data {
     width: 550px;
     height: 90px;
     padding: 0 0 0 26px;
@@ -100,6 +102,10 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  .image-fave {
+      cursor: pointer;
   }
 
   .view-news {
@@ -178,9 +184,7 @@ body{
 }
 
 .filter-items {
-    width: 100%;
-    margin-left: 10px;
-    padding-left: 10px;
+    padding-left: 10px; 
   }
 
 .dropdown-menu {
