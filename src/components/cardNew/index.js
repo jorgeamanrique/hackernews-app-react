@@ -1,7 +1,7 @@
 import { React, useState, useEffect } from 'react';
-import '../App.css';
+import './CardNew.modules.css';
 
-const NewsCard = ({ article }) => {
+const CardNew = ({ article }) => {
     const [liked, setLiked] = useState(false);
 
     // Get time ago for each article:
@@ -96,4 +96,4 @@ const NewsCard = ({ article }) => {
     );
 };
 
-export default NewsCard; 
+export default CardNew; 

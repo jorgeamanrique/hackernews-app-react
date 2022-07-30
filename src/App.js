@@ -1,8 +1,8 @@
 import './App.css';
-import HomePage from './components/HomePage';
+import HomeNews from './components/homeNews';
 
 const  App = () => {
-  return <HomePage></HomePage>
+  return <HomeNews></HomeNews>
 }
 
 export default App;

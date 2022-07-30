@@ -1,16 +1,14 @@
-import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import NewsList from "./NewsList"; 
+import axios from 'axios';
+import ListNews from '../listNews';
+import PaginationRounded from '../pagination';
+import SearchNews from '../searchNews';
+import './HomeNews.modules.css';
 
-import '../App.css';
-import PaginationRounded from './pagination';
-import Filter from './Filter';
-
-const HomePage = () => {
+const HomeNews = () => {
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState("reactjs");
   const [articles, setArticles] = useState([]);
-  //const [isLoading, setIsLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(0);
   const [view, setView] = useState("all");
   const [open, setOpen] = useState(false);
@@ -18,7 +16,6 @@ const HomePage = () => {
 
   useEffect(() => {
     if(view === 'all') {
-    // setIsLoading(true);
         const fetchData = async () => {
         try {
             const { data } = await axios.get("https://hn.algolia.com/api/v1/search_by_date?",{
@@ -31,9 +28,7 @@ const HomePage = () => {
         catch (error) {
             console.log(error);
         } finally {
-            // setIsLoading(false);
-        }
-        };
+        }};
         fetchData();
     }
     else{
@@ -80,14 +75,14 @@ const HomePage = () => {
                     </li>
                 </ul>
                 <div className="filter-root">
-                        <div className={`select-container ${view === 'all' ? 'active' : 'inactive'}`} id="select-container" onClick={() => {setOpen(!open)}}>
-                            <p>{selectedFilter}</p>
-                            <img src="arrow.png"></img>
-                        </div>
-                        <Filter open={open} view={view} setQuery={setQuery} setOpen={setOpen} setSelectedFilter={setSelectedFilter}></Filter>
+                    <div className={`select-container ${view === 'all' ? 'active' : 'inactive'}`} id="select-container" onClick={() => {setOpen(!open)}}>
+                        <p>{selectedFilter}</p>
+                        <img src="arrow.png"></img>
+                    </div>
+                    <SearchNews open={open} view={view} setQuery={setQuery} setOpen={setOpen} setSelectedFilter={setSelectedFilter}></SearchNews>
                 </div>
                 <div className="news-container">
-                    <NewsList view={view} articles={articles}></NewsList>
+                    <ListNews view={view} articles={articles}></ListNews>
                 </div>
                 <PaginationRounded
                 setPage={setPage}
@@ -98,4 +93,4 @@ const HomePage = () => {
   )
 };
 
-export default HomePage;
+export default HomeNews;
