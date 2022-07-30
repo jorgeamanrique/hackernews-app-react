@@ -4,25 +4,20 @@ import Pagination from './AppPagination'
 import NewsList from "./NewsList"; 
 
 import '../App.css';
+import PaginationRounded from './AppPagination';
+import Filter from './Filter';
 
 const HomePage = () => {
-  const [currentPage, setCurrentPage] = useState(0);
+  const [page, setPage] = useState(1);
+  const [query, setQuery] = useState("reactjs");
   const [articles, setArticles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(0);
   const [view, setView] = useState("all");
-
-  const handleViewChange = (view) => { 
-      setView(view);
-  };  
-
-  const handlePageChange = event => {
-    setCurrentPage(event.selected);
-    console.log(`event.selected: ${event.selected}`);
-  };
+  const [open, setOpen] = useState(false);
 
   const handleFilter = event => {
-
+    setQuery(event);
   };
 
   useEffect(() => {
@@ -30,7 +25,10 @@ const HomePage = () => {
     setIsLoading(true);
         const fetchData = async () => {
         try {
-            const { data } = await axios.get("http://hn.algolia.com/api/v1/search?");
+            console.log(`page: ${page}`);
+            const { data } = await axios.get("https://hn.algolia.com/api/v1/search_by_date?",{
+                params: {query: query, page: page},
+            });
             const { hits, nbPages } = data;
             setArticles(hits);
             setTotalPages(nbPages);
@@ -44,38 +42,61 @@ const HomePage = () => {
         fetchData();
     }
     else{
-        
+        try{
+            let news = localStorage.getItem("liked-news");
+            if(news !== undefined){
+                setArticles(JSON.parse(news));
+            }
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setIsLoading(false);
+        }
     }
-  },[view]);
+  },[view, page, query]);
 
   return (
       <div className="container">
-          <div className="Rectangle-2-Copy">
-            <span className="HACKER-NEWS Text-Style">
+          <div className="title-info">
+            <span className="text-style">
               HACKER NEWS
             </span>
           </div>
           <ul className='view-news'>
-            <li className={view === 'all' ? 'active' : ''} onClick={()=>handleViewChange('all')}>
+            <li className={view === 'all' ? 'active' : ''} onClick={()=>{setView('all')}}>
                 <span>All</span>
             </li>
-            <li className={view === 'my-favs' ? 'active' : ''} onClick={()=>handleViewChange('my-favs')}>
+            <li className={view === 'my-favs' ? 'active' : ''} onClick={()=>{setView('my-favs')}}>
                 <span>My Favs</span>
             </li>
           </ul>
-          <select id="options" className="" onChange={e => handleFilter(e.target.value)} />
+          {/*<div className="filter-container">
+             <select id="options" className="select-filter" onChange={e => handleFilter(e.target.value)} >
+                <option value="-1" disabled selected hidden>Selet your news</option>
+                <option value="angular">Angular</option>
+                <option value="reactjs">Reacts</option>
+                <option value="vuejs">Vuejs</option>
+            </select> 
+                
+          </div>*/}
+          <div className="filter-root">
+            <div id="select-container" onClick={() => {setOpen(!open)}}>
+                <p>Select your news</p>
+                <img src="arrow.png"></img>
+            </div>
+            <Filter open={open}></Filter>
+          </div>
+          {/* <div className="filter-container">
+            
+          </div> */}
+          
           <div className="news-container">
             <NewsList view={view} articles={articles}></NewsList>
           </div>
-          <Pagination 
-            forcePage={currentPage}
-            pageCount={totalPages} 
-            renderOnZeroPageCount={null} 
-            onPageChange={handlePageChange}
-            className="pagination"
-            activeClassName="active-page"
-            previousClassName='previus-page'
-            nextClassName='next-page' />         
+          <PaginationRounded
+            setPage={setPage}
+            totalPages={totalPages}
+            />
       </div>
   )
 };

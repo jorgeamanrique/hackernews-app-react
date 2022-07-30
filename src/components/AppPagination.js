@@ -1,12 +1,29 @@
 import * as React from 'react';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+import '../App.css'
 
-export default function PaginationRounded() {
+const PaginationRounded = ({ setPage, totalPages }) => {
+
+  const handlePageChange = (page) => {
+    setPage(page);
+    window.scroll(0,0);
+  };
+
   return (
-    <Stack spacing={2}>
-      {/* <Pagination count={10} shape="rounded" color="primary"/> */}
-      <Pagination count={10} variant="outlined" shape="rounded" color="primary"/>
-    </Stack>
+    <div>
+      <div className='pagination-content'>
+        <Stack spacing={2}>
+          <Pagination 
+            count={totalPages} 
+            variant="outlined" 
+            shape="rounded" 
+            color="primary"
+            onChange={e => handlePageChange(e.target.textContent)}/>
+        </Stack>
+      </div>
+    </div>
   );
 }
+
+export default PaginationRounded;

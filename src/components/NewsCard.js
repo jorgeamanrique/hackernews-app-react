@@ -3,17 +3,8 @@ import '../App.css';
 
 const NewsCard = ({ article }) => {
     const [liked, setLiked] = useState(false);
-    //const [articlesLiked, SetArticlesLiked] = useState([]);
 
-    useEffect(() => {
-        const item = localStorage.getItem(article.objectID);
-
-        if(item){
-            setLiked(true);
-        }
-        
-    }, [article.objectID]);
-
+    // Get time ago for each article:
     const timeSince = (date) => {
 
         var seconds = Math.floor((new Date() - date) / 1000);  
@@ -40,7 +31,21 @@ const NewsCard = ({ article }) => {
         }
         return Math.floor(seconds) + " seconds";
     };
+
+    // Identify the article is in my favs:
+    useEffect(() => {
+        const news = localStorage.getItem("liked-news")
+        //console.log(news);
+        if(news !== null){
+            const articleSearch = JSON.parse(news).filter(story => story.objectID === article.objectID);
+
+            if(articleSearch !== undefined && articleSearch.length === 1) {
+                setLiked(true);
+            }        
+        }
+    }, [article.objectID]);
     
+    // Event when item is added or removed from my faves: 
     const handleLiked = () => {
         let news = localStorage.getItem("liked-news");
         if(!liked){
@@ -67,18 +72,22 @@ const NewsCard = ({ article }) => {
         setLiked(!liked);
     };
 
-    if(!article.title) return null;
+    if(!article.story_title || !article.story_url) return null;
     return (
-        // <div className="news-card">
-        <div className="Rectangle">
-            <div className='news-info'>
-                <span className="news-date-author">
-                    {timeSince(new Date(article.created_at))} ago by {article.author}
-                </span>
-                <span className="nes-title">
-                    {article.title}
-                </span>
-            </div>
+        <div className="article-data">
+            <a href={article.story_url} target="_blank" rel="noreferrer" >
+                <div className='article-information'>
+                    <span className="article-date-author">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+                            <path fill="#606060" d="M8 1.333c3.676 0 6.667 2.991 6.667 6.667 0 3.676-2.991 6.667-6.667 6.667-3.676 0-6.667-2.991-6.667-6.667 0-3.676 2.991-6.667 6.667-6.667zM8 0C3.582 0 0 3.582 0 8s3.582 8 8 8 8-3.582 8-8-3.582-8-8-8zm.667 8V4H7.333v5.333H12V8H8.667z"/>
+                        </svg>
+                        {timeSince(new Date(article.created_at))} ago by {article.author}
+                    </span>
+                    <span className="article-title">
+                        {article.story_title}
+                    </span>
+                </div>
+            </a>
             <div className='fave'>
             {!liked ? 
             <svg onClick={e => handleLiked(article.objectID)} xmlns="http://www.w3.org/2000/svg" width="24" height="22" viewBox="0 0 24 22">
