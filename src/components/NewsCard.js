@@ -35,7 +35,7 @@ const NewsCard = ({ article }) => {
     // Identify the article is in my favs:
     useEffect(() => {
         const news = localStorage.getItem("liked-news")
-        //console.log(news);
+        // console.log(`article.story_title: ${article.story_title}, article.story_url: ${article.story_url}, article.objectID: ${article.objectID}`);
         if(news !== null){
             const articleSearch = JSON.parse(news).filter(story => story.objectID === article.objectID);
 
@@ -50,18 +50,14 @@ const NewsCard = ({ article }) => {
         let news = localStorage.getItem("liked-news");
         if(!liked){
             if(!news){
-                console.log(`No existe..`);
-
                 let newsArray = [];
                 newsArray.push(article);
                 localStorage.setItem("liked-news", JSON.stringify(newsArray));
             }
             else{
-                console.log(`Si existe... news: ${news}`);
                 let temp = JSON.parse(news).filter(story => story.objectID !== article.objectID);
                 temp.push(article);
                 localStorage.setItem("liked-news",JSON.stringify(temp));
-                console.log(news);
             }
         }
         else{

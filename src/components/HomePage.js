@@ -15,6 +15,7 @@ const HomePage = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [view, setView] = useState("all");
   const [open, setOpen] = useState(false);
+  const [selectedFilter, setSelectedFilter] = useState("Select your news");
 
   const handleFilter = event => {
     setQuery(event);
@@ -25,7 +26,6 @@ const HomePage = () => {
     setIsLoading(true);
         const fetchData = async () => {
         try {
-            console.log(`page: ${page}`);
             const { data } = await axios.get("https://hn.algolia.com/api/v1/search_by_date?",{
                 params: {query: query, page: page},
             });
@@ -43,9 +43,26 @@ const HomePage = () => {
     }
     else{
         try{
+            setOpen(false);
+            setArticles(null);
             let news = localStorage.getItem("liked-news");
-            if(news !== undefined){
+            let count = 0;
+            if(news !== undefined && news !== null){
                 setArticles(JSON.parse(news));
+                //console.log(`news.length: ${news.length}, division: ${13536/4}`);
+                JSON.parse(news).forEach(article=>{
+                    console.log(`article.objectID: ${article.objectID}`);
+
+                    count ++;
+                });
+                console.log(`entro.. count: ${count}`);
+            }
+            
+            if(count >0){
+                setTotalPages(Math.ceil(count/20));
+            }
+            else{
+                setTotalPages(0);
             }
         } catch (error) {
             console.log(error);
@@ -70,26 +87,13 @@ const HomePage = () => {
                 <span>My Favs</span>
             </li>
           </ul>
-          {/*<div className="filter-container">
-             <select id="options" className="select-filter" onChange={e => handleFilter(e.target.value)} >
-                <option value="-1" disabled selected hidden>Selet your news</option>
-                <option value="angular">Angular</option>
-                <option value="reactjs">Reacts</option>
-                <option value="vuejs">Vuejs</option>
-            </select> 
-                
-          </div>*/}
           <div className="filter-root">
-            <div id="select-container" onClick={() => {setOpen(!open)}}>
-                <p>Select your news</p>
+            <div className={`select-container ${view === 'all' ? 'active' : 'inactive'}`} id="select-container" onClick={() => {setOpen(!open)}}>
+                <p>{selectedFilter}</p>
                 <img src="arrow.png"></img>
             </div>
-            <Filter open={open}></Filter>
+            <Filter open={open} view={view} setQuery={setQuery} setOpen={setOpen} setSelectedFilter={setSelectedFilter}></Filter>
           </div>
-          {/* <div className="filter-container">
-            
-          </div> */}
-          
           <div className="news-container">
             <NewsList view={view} articles={articles}></NewsList>
           </div>
