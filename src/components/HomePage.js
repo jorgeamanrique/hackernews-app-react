@@ -11,19 +11,15 @@ const HomePage = () => {
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState("reactjs");
   const [articles, setArticles] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  //const [isLoading, setIsLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(0);
   const [view, setView] = useState("all");
   const [open, setOpen] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState("Select your news");
 
-  const handleFilter = event => {
-    setQuery(event);
-  };
-
   useEffect(() => {
     if(view === 'all') {
-    setIsLoading(true);
+    // setIsLoading(true);
         const fetchData = async () => {
         try {
             const { data } = await axios.get("https://hn.algolia.com/api/v1/search_by_date?",{
@@ -36,7 +32,7 @@ const HomePage = () => {
         catch (error) {
             console.log(error);
         } finally {
-            setIsLoading(false);
+            // setIsLoading(false);
         }
         };
         fetchData();
@@ -49,13 +45,9 @@ const HomePage = () => {
             let count = 0;
             if(news !== undefined && news !== null){
                 setArticles(JSON.parse(news));
-                //console.log(`news.length: ${news.length}, division: ${13536/4}`);
                 JSON.parse(news).forEach(article=>{
-                    console.log(`article.objectID: ${article.objectID}`);
-
                     count ++;
                 });
-                console.log(`entro.. count: ${count}`);
             }
             
             if(count >0){
@@ -67,7 +59,7 @@ const HomePage = () => {
         } catch (error) {
             console.log(error);
         } finally {
-            setIsLoading(false);
+            // setIsLoading(false);
         }
     }
   },[view, page, query]);
